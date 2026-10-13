@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, Bum! 🎂</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: Georgia, "Times New Roman", serif;
+    background: linear-gradient(135deg, #ffe0eb, #fff0f5, #f9d9ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px 15px;
+    color: #873b58;
+}
+
+.hearts {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.heart {
+    position: absolute;
+    bottom: -50px;
+    animation: floatUp linear infinite;
+    opacity: .6;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(0);
+        opacity: 0;
+    }
+    20% { opacity: .7; }
+    100% {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.small-title {
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font: 12px Arial, sans-serif;
+    color: #c45b83;
+    margin-bottom: 15px;
+}
+
+h1 {
+    font-size: clamp(32px, 8vw, 48px);
+    color: #b83f6b;
+    margin-bottom: 12px;
+    text-shadow: 0 3px 15px #ffffff;
+}
+
+.subtitle {
+    font-size: 15px;
+    color: #a65a78;
+    margin-bottom: 35px;
+    line-height: 1.7;
+}
+
+/* ENVELOPE */
+
+.envelope-area {
+    height: 245px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+    margin-bottom: 22px;
+}
+
+.envelope {
+    width: 290px;
+    height: 185px;
+    position: relative;
+    cursor: pointer;
+    filter: drop-shadow(0 18px 20px #bb668333);
+    transition: transform .4s;
+}
+
+.envelope:hover {
+    transform: translateY(-6px);
+}
+
+.envelope-back {
+    position: absolute;
+    inset: 0;
+    background: #eaa0b8;
+    border-radius: 5px;
+}
+
+.envelope-front {
+    position: absolute;
+    inset: 0;
+    background: #f6b9cc;
+    clip-path: polygon(0 0, 50% 57%, 100% 0, 100% 100%, 0 100%);
+    border-radius: 5px;
+    z-index: 3;
+}
+
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f8c6d6;
+    clip-path: polygon(0 0, 100% 0, 50% 59%);
+    transform-origin: top;
+    transition: transform .7s ease;
+    z-index: 4;
+}
+
+.letter {
+    position: absolute;
+    width: 86%;
+    height: 155px;
+    left: 7%;
+    top: 10px;
+    background: #fffaf6;
+    border-radius: 6px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform .8s ease, height .8s ease;
+    box-shadow: 0 2px 12px #9f426022;
+}
+
+.letter p {
+    font-size: 17px;
+    color: #bb5278;
+}
+
+.letter span {
+    margin-top: 10px;
+    font-size: 30px;
+}
+
+.seal {
+    position: absolute;
+    z-index: 5;
+    width: 49px;
+    height: 49px;
+    border-radius: 50%;
+    background: #cf4778;
+    color: white;
+    display: grid;
+    place-items: center;
+    top: 95px;
+    left: calc(50% - 24px);
+    font-size: 25px;
+    box-shadow: 0 3px 10px #a83c6633;
+    transition: opacity .3s;
+}
+
+/* OPEN ENVELOPE */
+
+.envelope.open .flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+.envelope.open .letter {
+    transform: translateY(-100px);
+    height: 205px;
+    z-index: 5;
+}
+
+.envelope.open .seal {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.hint {
+    font: 13px Arial, sans-serif;
+    color: #b55c7d;
+    animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+    50% { opacity: .5; }
+}
+
+/* LETTER CARD */
+
+.letter-card {
+    display: none;
+    text-align: left;
+    background: rgba(255, 252, 248, .97);
+    border: 1px solid #f5ccda;
+    border-radius: 18px;
+    padding: 30px 25px;
+    box-shadow: 0 15px 45px #a64c6b22;
+    animation: appear .8s ease;
+    line-height: 1.9;
+    margin-top: 20px;
+}
+
+.letter-card.show {
+    display: block;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.letter-card h2 {
+    text-align: center;
+    font-size: 27px;
+    color: #c14876;
+    margin-bottom: 18px;
+}
+
+.letter-card p {
+    font-size: 15px;
+    margin-bottom: 15px;
+    color: #704557;
+}
+
+.signature {
+    text-align: right;
+    font-style: italic;
+    color: #c14876;
+    font-size: 19px;
+    margin-top: 25px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+}
+
+button {
+    border: none;
+    border-radius: 30px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: .25s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+.primary {
+    color: white;
+    background: linear-gradient(135deg, #e75c91, #c74780);
+    box-shadow: 0 5px 15px #c7478033;
+}
+
+.secondary {
+    color: #b74775;
+    background: #fbe3ec;
+}
+
+footer {
+    margin-top: 30px;
+    font: 11px Arial, sans-serif;
+    letter-spacing: 1px;
+    color: #b87b94;
+}
+
+@media (max-width: 400px) {
+    .envelope {
+        width: 260px;
+        height: 165px;
+    }
+
+    .seal {
+        top: 83px;
+    }
+
+    .letter-card {
+        padding: 24px 19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<main class="container">
+
+    <p class="small-title">A little something for you</p>
+
+    <h1>Happy Birthday! 🎂</h1>
+
+    <p class="subtitle">
+        May special message ako para sa'yo, Bum...<br>
+        Buksan mo ang sulat na ito. 💌
+    </p>
+
+    <div class="envelope-area">
+        <div class="envelope" id="envelope" onclick="openLetter()">
+
+            <div class="envelope-back"></div>
+
+            <div class="letter">
+                <p>To: Bum 🎂</p>
+                <span>🎁</span>
+            </div>
+
+            <div class="flap"></div>
+            <div class="envelope-front"></div>
+            <div class="seal">♥</div>
+
+        </div>
+    </div>
+
+    <p class="hint" id="hint">♡ Tap the envelope to open ♡</p>
+
+    <article class="letter-card" id="letterCard">
+
+        <h2>Happy Birthday, Bum! 🎂💕</h2>
+
+        <p>
+            Hi, Bum! 🥳💗
+        </p>
+
+        <p>
+            Happy birthday sa'yo! Sana maging masaya at memorable
+            ang araw na ito para sa'yo. Deserve mo lahat ng
+            happiness, love, at blessings na dumarating sa buhay mo.
+        </p>
+
+        <p>
+            Thank you for being you. Sana patuloy kang maging
+            masaya, healthy, at strong sa lahat ng challenges
+            na haharapin mo. Huwag mong kalimutang magpahinga,
+            ngumiti, at i-enjoy ang bawat moment ng buhay mo.
+        </p>
+
+        <p>
+            I wish you more birthdays to celebrate, more dreams
+            to achieve, more reasons to smile, and more beautiful
+            memories to make. Sana matupad mo lahat ng wishes
+            mo at makuha mo ang mga bagay na nagpapasaya sa'yo.
+        </p>
+
+        <p>
+            Always remember na special ka at mahalaga ka.
+            I hope this little message makes you smile,
+            kahit papaano, sa special day mo. Enjoy your day
+            to the fullest, Bum! You deserve the best. 🎉💖
+        </p>
+
+        <p>
+            Once again, happy birthday! Stay happy, stay kind,
+            and keep shining. Sana maging maganda ang taon na
+            ito para sa'yo, puno ng love, peace, and blessings. 🎂✨
+        </p>
+
+        <div class="signature">
+            With love and best wishes, 💗<br>
+            <strong>Someone Who Cares About You</strong>
+        </div>
+
+        <div class="buttons">
+            <button class="primary" onclick="showHearts()">
+                Send Some Love 💖
+            </button>
+
+            <button class="secondary" onclick="copyLetter()">
+                Copy Message 📋
+            </button>
+        </div>
+
+    </article>
+
+    <footer>MADE WITH LOVE, JUST FOR YOU ♡</footer>
+
+</main>
+
+<script>
+let opened = false;
+
+function openLetter() {
+    if (opened) return;
+
+    opened = true;
+
+    document.getElementById("envelope")
+        .classList.add("open");
+
+    document.getElementById("hint").textContent =
+        "Your birthday message is opening... 💗";
+
+    setTimeout(() => {
+        document.getElementById("letterCard")
+            .classList.add("show");
+
+        document.getElementById("hint").textContent =
+            "A special birthday message just for you ♡";
+
+        document.getElementById("letterCard")
+            .scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+    }, 850);
+}
+
+// Floating hearts
+function createHeart() {
+    const heart = document.createElement("span");
+    heart.className = "heart";
+
+    const symbols = ["♡", "♥", "💗", "💕", "💖", "🎂", "✨"];
+
+    heart.textContent =
+        symbols[Math.floor(Math.random() * symbols.length)];
+
+    heart.style.left = Math.random() * 100 + "%";
+    heart.style.fontSize = (14 + Math.random() * 22) + "px";
+    heart.style.animationDuration = (5 + Math.random() * 7) + "s";
+
+    document.getElementById("hearts").appendChild(heart);
+
+    setTimeout(() => heart.remove(), 12000);
+}
+
+setInterval(createHeart, 650);
+
+// Celebration
+function showHearts() {
+    for (let i = 0; i < 35; i++) {
+        setTimeout(createHeart, i * 80);
+    }
+}
+
+// Copy birthday message
+async function copyLetter() {
+    const letter = document.getElementById("letterCard");
+    const text = letter.innerText
+        .replace(/Send Some Love 💖\s*Copy Message 📋/g, "")
+        .trim();
+
+    try {
+        await navigator.clipboard.writeText(text);
+        alert("Birthday message copied! 💌");
+    } catch (error) {
+        const area = document.createElement("textarea");
+        area.value = text;
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        area.remove();
+        alert("Birthday message copied! 💌");
+    }
+}
+</script>
+
+</body>
+</html>
